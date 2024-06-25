@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jmeter-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jmeter-controller
+  template:
+    metadata:
+      labels:
+        app: jmeter-controller
+    spec:
+      nodeSelector:
+        nodepool: perf
+      serviceAccountName: jmeter-service-account
+      containers:
+        - name: jmeter-controller
+          image: fahad16/jmeter-replica-api:latest 
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: "0.2"  
+              memory: "100Mi"
+          ports:
+            - containerPort: 3000
