@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jmeter-slave
+  namespace: perf
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: jmeter-slave
+  template:
+    metadata:
+      labels:
+        app: jmeter-slave
+    spec:
+      nodeSelector:
+        nodepool: perf
+      containers:
+      - name: jmeter-slave
+        image: fahad16/jmeter-slave:latest  
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: "1"  
+            memory: "1Gi" 
+        ports:
+        - containerPort: 1099
+        - containerPort: 50000
