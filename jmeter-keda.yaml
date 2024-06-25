@@ -1,0 +1,19 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: jmeter-slave-scaledobject  
+  namespace: perf 
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: jmeter-slave 
+  minReplicaCount: 0
+  triggers:
+  - type: metrics-api
+    metadata:
+      url: http://10.0.3.177:3000/getReplicaCount  
+      valueLocation: "replicaCount"
+      targetValue: "1"
+      activationTargetValue: "0.5"
+  pollingInterval: 15  
