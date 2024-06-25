@@ -1,0 +1,14 @@
+FROM fahad16/jmeter-light
+
+# Downloading JMeter Plugins (directly in ext)
+RUN curl -L https://bitbucket.org/pjtr/jmeter-websocket-samplers/downloads/JMeterWebSocketSamplers-1.2.10.jar -o $JMETER_HOME/lib/ext/JMeterWebSocketSamplers-1.2.10.jar \
+  && curl -L https://raw.githubusercontent.com/pavanmt/Jmeterplugin-radiussampler/master/RadiusSampler.jar -o $JMETER_HOME/lib/ext/RadiusSampler.jar
+
+# Updating jmeter.properties
+RUN sed -i 's/#*CookieManager.save.cookies=false/CookieManager.save.cookies=true/g' $JMETER_HOME/bin/jmeter.properties
+
+# Exposing JMeter Slave Ports
+EXPOSE 1099 50000
+CMD ip=$(hostname -i | awk '{print $1}') && \
+    export CONTAINER_IP=$ip && \
+    jmeter -s -Jserver.rmi.ssl.disable=true -Djava.rmi.server.hostname=$ip
