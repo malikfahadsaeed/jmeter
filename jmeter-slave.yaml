@@ -18,7 +18,6 @@ spec:
       containers:
       - name: jmeter-slave
         image: fahad16/jmeter-slave:latest  
-        imagePullPolicy: IfNotPresent
         resources:
           requests:
             cpu: "1"  
